@@ -1,0 +1,89 @@
+name: Chunk64
+version: 2.0
+author: Chinwe
+website: http://chunk64.net
+main: net.chunk64.chinwe.Chunk64
+prefix: C64
+commands:
+  chunk64:
+    usage: /<command>]
+    description: Information about the plugin
+    permission-message: all
+  halt:
+    usage: /<command> <player>
+    description: Halt a player
+    permission-message: all
+  playerinfo:
+    usage: /<command>
+    description: View player information commands
+    permission-message: all
+    aliases: [info, pinfo]
+  playerset:
+    usage: /<command>
+    description: View help for setting player variables
+    permission-message: all
+    aliases: [pset]
+  spoof:
+    usage: /<command> <player> <command to run>
+    description: Force a player to run a command
+    permission-message: all
+    aliases: [cspoof, sudo]
+  spoff:
+    usage: /<command> <player> <message to say>
+    description: Force a player to say something
+    permission-message: all
+    aliases: [cspoff, spoofc]
+  plugintoggle:
+    usage: /<command> <plugin name | *>
+    description: Enable/disable a specific plugin, or all of them (except this one)
+    permission-message: owners-only
+    aliases: [ptog, plugintog]
+  mute:
+    usage: /<command> <player> [time]
+    description: Mute/unmute a player, optionally for a given time, and disallow use of comamnds specified in the config
+    permission-message: all
+    aliases: [cmute]
+  offline:
+    usage: /<command>
+    description: View offline player management commands
+    permission-message: all
+    aliases: [coffline]
+  measure:
+    usage: /<command> ["mode"]
+    description: Toggle, or switch measure stick mode
+    permission-message: player-only
+    aliases: [cmeasure]
+  motd:
+    usage: /<command>
+    description: View MOTD commands
+    permission-message: all
+    aliases: [cmotd]
+  store:
+    usage: /<command>
+    description: View inventory storing commands
+    permission-message: player-only
+    aliases: [cstore]
+  restart:
+    usage: /<command> [kick message]
+    description: Restart the server
+    permission-message: owner-only
+  staffchat:
+    usage: /<command> <message>
+    description: Chat that only ops can see
+    permission-message: all
+    aliases: [sc, ac]
+  staffchattoggle:
+    usage: /<command>
+    description: Toggle always talking in StaffChat
+    permission-message: player-only
+    aliases: [sct, act]
+  ride:
+    usage: /<command>
+    description: View entity riding commands
+    permission-message: player-only
+    aliases: [cride]
+  notes:
+    usage: /<command>
+    description: View player notes commands
+    permission-message: all
+    aliases: [cnotes]

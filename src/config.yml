@@ -1,0 +1,51 @@
+# Chunk64 config
+
+# Players who will have access to owner-only commands
+owner-names:
+  - Chinwe
+# Notify a user when they are halted (and by whom)
+warn-on-halt: true
+
+# Players who are muted with /mute cannot use these commands
+# Try to list the raw command name, not one of its aliases
+mute-commands:
+  - msg
+  - me
+  - m
+  - tell
+  - say
+  - broadcast
+  - bcast
+
+# Enable debug mode
+debug-mode: true
+
+# Send command aliases with the usage if a player doesn't use a command correctly
+send-aliases: true
+
+# This exempts the owners from being muted, halted, forced to run commands etc WHILE ONLINE
+# Anyone can be exempt by having the permission node chunk64.<command>.exempt
+exempt-owners: false
+
+# This is the ID of the measure stick (286 = gold axe)
+measure-stick: 286
+
+# This will appear before all MOTDs on the server list
+# Please leave it surrounded with 'quotes' to be safe from errors
+# Set to 'none' to disable random MOTDs: the only one to be shown will be the one specified in server.properties
+motd-prefix: 'Chunk&464&7: '
+
+# This will appear before all staffchat messages
+# The final colour code will be the colour of the message
+staffchat-prefix: '&8[&3StaffChat&8] &b'
+
+# This will be shown to players who try to join but are not whitelisted
+# Please leave it surrounded with 'quotes' to be safe from errors
+# You can use [player] to represent the player's name, and \n for a new line
+# Please use double apostrophes '' if you need to use one
+# Set to 'none' to disable
+whitelist-message: '&bSorry &3[player]&b, you aren''t whitelisted![newline]&2Apply at &awww.chunk64.net'
+
+# This is the name of your .bat/.sh file used to start the server
+# If you do not have one/want to disable /restart, set this to 'none'
+startup-file-name: 'go.bat'
