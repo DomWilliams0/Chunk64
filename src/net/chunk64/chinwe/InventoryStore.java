@@ -16,14 +16,14 @@ public class InventoryStore
 	private Map<String, ItemStack[]> inventories = new HashMap<String, ItemStack[]>();
 	private Map<String, ItemStack[]> armours = new HashMap<String, ItemStack[]>();
 
-	public InventoryStore ()
+	public InventoryStore()
 	{
 
 
 	}
 
 
-	public void store (Player p, boolean override) throws IllegalArgumentException
+	public void store(Player p, boolean override) throws IllegalArgumentException
 	{
 		String player = p.getName();
 
@@ -38,10 +38,11 @@ public class InventoryStore
 	}
 
 
-	public void restore (Player p) throws IllegalArgumentException
+	public void restore(Player p) throws IllegalArgumentException
 	{
 		String player = p.getName();
-		if (!inventories.containsKey(player)) throw new IllegalArgumentException("That inventory is not stored!");
+		if (!inventories.containsKey(player))
+			throw new IllegalArgumentException("That inventory is not stored!");
 
 		ItemStack[] contents = inventories.get(player);
 		ItemStack[] armour = armours.get(player);
@@ -53,83 +54,103 @@ public class InventoryStore
 		armours.remove(player);
 	}
 
-	public boolean isStored (String name)
+	public boolean isStored(String name)
 	{
 		return inventories.containsKey(name);
 	}
 
-	public void storeInChest (Player p, Chest chest) throws IllegalArgumentException
+	public void storeInChest(Player p, Chest chest) throws IllegalArgumentException
 	{
-		PlayerInventory inv = p.getInventory();
-		List<ItemStack> contents = new ArrayList<ItemStack>();
+		List<ItemStack> pInv = cleanse(p.getInventory());
+		List<ItemStack> chestContents = cleanse(chest.getInventory());
+		int maxChestSize = (C64Utils.isDoubleChest(chest) ? 54 : 27);
 
-		for (ItemStack is : inv.getContents())
-			if (is != null) contents.add(is);
-		for (ItemStack is : inv.getArmorContents())
-			if (is.getTypeId() != 0) contents.add(is);
+		int chestSize = chestContents.size();
+		int invSize = pInv.size();
 
-		// Compare sizes
-		// TODO Don't override chest inventory, add to it
-		int chestSize = (C64Utils.isDoubleChest(chest) ? 54 : 27);
+		if (invSize == 0)
+			throw new IllegalArgumentException("You don't have anything in your inventory to deposit!");
 
+		if (chestSize + invSize > maxChestSize)
+			throw new IllegalArgumentException("There is not enough room in that chest!");
 
-		if (contents.size() > chestSize) throw new IllegalArgumentException("There is not enough room in that chest!");
-
-		chest.getInventory().setContents(contents.toArray(new ItemStack[contents.size()]));
+		chest.getInventory().setContents(combineInventories(pInv, chestContents));
 		clearInventory(p);
-
-
 	}
 
-	public void retrieveFromChest (Player p, Chest chest) throws IllegalArgumentException
+	public void retrieveFromChest(Player p, Chest chest) throws IllegalArgumentException
 	{
 		List<ItemStack> contents = cleanse(chest.getInventory());
+		List<ItemStack> pInv = cleanse(p.getInventory());
 
-		if (contents.size() > p.getInventory().getContents().length)
+		int chestSize = contents.size();
+		int invSize = pInv.size();
+
+		if (chestSize == 0)
+			throw new IllegalArgumentException("You can't withdraw from an empty chest!");
+
+		if (chestSize + invSize > p.getInventory().getContents().length)
 			throw new IllegalArgumentException("There is not enough room in your inventory!");
 
-		// TODO Put on armour automatically?
-		p.getInventory().setContents(contents.toArray(new ItemStack[contents.size()]));
+		p.getInventory().setContents(combineInventories(pInv, contents));
 
 		chest.getInventory().clear();
-		;
 	}
 
-	private void clearInventory (Player p)
+	private ItemStack[] combineInventories(List<ItemStack> cleansedInv, List<ItemStack> cleansedItems)
+	{
+		cleansedInv.addAll(cleansedItems);
+		ItemStack[] contents = new ItemStack[cleansedInv.size()];
+		cleansedInv.toArray(contents);
+		return contents;
+	}
+
+	private void clearInventory(Player p)
 	{
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(new ItemStack[p.getInventory().getArmorContents().length]);
 	}
 
-	public boolean isEmpty (Inventory inv)
+	/**
+	 * Returns true if the player should store inventory in the chest, false if they should withdraw from it
+	 */
+	public boolean shouldStore(Chest chest, Player player)
 	{
-		for (ItemStack is : inv.getContents())
-		{
-			if (is == null) continue;
-			if (is.getTypeId() == 0) continue;
-			return false;
-		}
+		double chestFilled = (double) cleanse(chest.getInventory()).size() / (double) chest.getInventory().getContents().length;
+		double playerFilled = (double) cleanse(player.getInventory()).size() / (double) player.getInventory().getContents().length;
 
-		return true;
-
+		// Favour storing in chest
+		return playerFilled >= chestFilled;
 	}
 
-	public List<ItemStack> cleanse (Inventory inv)
+	public List<ItemStack> cleanse(Inventory inv)
 	{
 		List<ItemStack> contents = new ArrayList<>();
 		for (ItemStack is : inv.getContents())
 		{
-			if (is == null) continue;
-			if (is.getTypeId() == 0) continue;
+			if (is == null)
+				continue;
+			if (is.getTypeId() == 0)
+				continue;
 			contents.add(is);
-			if (inv instanceof PlayerInventory)
-				if (is.getTypeId() != 0) contents.add(is);
+		}
+
+		if (inv instanceof PlayerInventory)
+		{
+			for (ItemStack is : ((PlayerInventory) inv).getArmorContents())
+			{
+				if (is == null)
+					continue;
+				if (is.getTypeId() == 0)
+					continue;
+				contents.add(is);
+			}
 		}
 
 		return contents;
 	}
 
-	public void restoreAll ()
+	public void restoreAll()
 	{
 		Iterator<String> it = inventories.keySet().iterator();
 		while (it.hasNext())
@@ -151,18 +172,10 @@ public class InventoryStore
 
 		}
 
-		armours.clear();;
+		armours.clear();
+		;
 		inventories.clear();
 
 	}
-
-	public void addToInv(Inventory inv, ItemStack[] items)
-	{
-
-
-
-
-	}
-
 
 }
