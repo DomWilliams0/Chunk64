@@ -1,14 +1,14 @@
 package net.chunk64.chinwe.util;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public enum ParticleEffect
 {
@@ -36,6 +36,7 @@ public enum ParticleEffect
 
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final Map<Integer, ParticleEffect> ID_MAP = new HashMap<Integer, ParticleEffect>();
+
 	static
 	{
 		for (ParticleEffect effect : values())
@@ -47,10 +48,16 @@ public enum ParticleEffect
 
 	public static ParticleEffect fromName(String name)
 	{
-		if (name == null) { return null; }
+		if (name == null)
+		{
+			return null;
+		}
 		for (Entry<String, ParticleEffect> e : NAME_MAP.entrySet())
 		{
-			if (e.getKey().equalsIgnoreCase(name)) { return e.getValue(); }
+			if (e.getKey().equalsIgnoreCase(name))
+			{
+				return e.getValue();
+			}
 		}
 		return null;
 	}
@@ -65,15 +72,21 @@ public enum ParticleEffect
 	// List<String> list = new ArrayList<String>();
 	// for (String name : NAME_MAP.keySet())
 	// {
-	// list.add(name + "§7, §8" + NAME_MAP.get(name).getId());
+	// list.add(name + "ï¿½7, ï¿½8" + NAME_MAP.get(name).getId());
 	// }
 	// return new GeneralUtil().getDetailedList(list);
 	// }
 
-	public static void sendToPlayer(ParticleEffect effect, Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed, int count) throws Exception
+	public static void sendToPlayer(ParticleEffect effect, Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed, int count)
 	{
-		Object packet = createPacket(effect, location, offsetX, offsetY, offsetZ, speed, count);
-		sendPacket(player, packet);
+		try
+		{
+			Object packet = createPacket(effect, location, offsetX, offsetY, offsetZ, speed, count);
+			sendPacket(player, packet);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public static void sendToLocation(ParticleEffect effect, Location location, float offsetX, float offsetY, float offsetZ, float speed, int count)
@@ -109,7 +122,8 @@ public enum ParticleEffect
 
 	public static Object createPacket(ParticleEffect effect, Location location, float offsetX, float offsetY, float offsetZ, float speed, int count) throws Exception
 	{
-		if (count <= 0) count = 1;
+		if (count <= 0)
+			count = 1;
 		Object packet = getPacket63WorldParticles();
 		setValue(packet, "a", effect.name);
 		setValue(packet, "b", (float) location.getX());
@@ -125,7 +139,8 @@ public enum ParticleEffect
 
 	public static Object createCrackPacket(boolean icon, int id, byte data, Location location, float offsetX, float offsetY, float offsetZ, int count) throws Exception
 	{
-		if (count <= 0) count = 1;
+		if (count <= 0)
+			count = 1;
 		Object packet = getPacket63WorldParticles();
 		String modifier = "iconcrack_" + id;
 		if (!icon)

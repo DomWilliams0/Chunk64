@@ -5,6 +5,7 @@ import net.chunk64.chinwe.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -40,7 +41,7 @@ public class C64Utils
 	/**
 	 * Logs with level INFO *
 	 */
-	public static void info (String msg)
+	public static void info(String msg)
 	{
 		Chunk64.c64.getLogger().log(Level.INFO, ChatColor.translateAlternateColorCodes('&', msg));
 	}
@@ -48,7 +49,7 @@ public class C64Utils
 	/**
 	 * Logs with level WARNING *
 	 */
-	public static void warning (String msg)
+	public static void warning(String msg)
 	{
 		Chunk64.c64.getLogger().log(Level.WARNING, ChatColor.translateAlternateColorCodes('&', msg));
 	}
@@ -56,7 +57,7 @@ public class C64Utils
 	/**
 	 * Logs with level SEVERE *
 	 */
-	public static void severe (String msg)
+	public static void severe(String msg)
 	{
 		Chunk64.c64.getLogger().log(Level.SEVERE, ChatColor.translateAlternateColorCodes('&', msg));
 	}
@@ -64,7 +65,7 @@ public class C64Utils
 	/**
 	 * Message CommandSender with coloured message, and default importance
 	 */
-	public static void message (CommandSender sender, String msg)
+	public static void message(CommandSender sender, String msg)
 	{
 		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', msg));
 	}
@@ -72,7 +73,7 @@ public class C64Utils
 	/**
 	 * Message CommandSender with coloured message, and specified importance
 	 */
-	public static void message (CommandSender sender, String msg, Importance importance)
+	public static void message(CommandSender sender, String msg, Importance importance)
 	{
 		sender.sendMessage((importance == Importance.NORMAL ? PREFIX : ERROR_PREFIX) + ChatColor.translateAlternateColorCodes('&', msg));
 	}
@@ -80,7 +81,7 @@ public class C64Utils
 	/**
 	 * Messages CommandSender with exception message
 	 */
-	public static void error (CommandSender sender, Exception e)
+	public static void error(CommandSender sender, Exception e)
 	{
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ERROR_PREFIX + "&4Error: &c" + (e.getMessage() == null ? e : e.getMessage())));
 	}
@@ -88,7 +89,7 @@ public class C64Utils
 	/**
 	 * Messages CommandSender with message
 	 */
-	public static void error (CommandSender sender, String e)
+	public static void error(CommandSender sender, String e)
 	{
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', PREFIX + "&4Error: &c" + e));
 	}
@@ -96,16 +97,17 @@ public class C64Utils
 	/**
 	 * Debug message *
 	 */
-	public static void debugMessage (String msg)
+	public static void debugMessage(String msg)
 	{
 		// TODO Save to debug log file
-		if (Config.Debug) Chunk64.c64.getLogger().log(Level.WARNING, "DEBUG: " + msg);
+		if (Config.Debug)
+			Chunk64.c64.getLogger().log(Level.WARNING, "DEBUG: " + msg);
 	}
 
 	/**
 	 * Notify all ops online (except those specified), and logs message to console
 	 */
-	public static void notifyOps (String msg, String... except)
+	public static void notifyOps(String msg, String... except)
 	{
 		// TODO Log to console too
 
@@ -113,16 +115,18 @@ public class C64Utils
 
 		List<String> excepts = Arrays.asList(except);
 		for (Player p : Bukkit.getOnlinePlayers())
-			if (p.isOp() && !excepts.contains(p.getName())) message(p, "&7&o" + ChatColor.stripColor(msg));
+			if (p.isOp() && !excepts.contains(p.getName()))
+				message(p, "&7&o" + ChatColor.stripColor(msg));
 
-		if (!excepts.contains("CONSOLE")) C64Utils.info(msg);
+		if (!excepts.contains("CONSOLE"))
+			C64Utils.info(msg);
 	}
 
 	/**
 	 * @param s Time in format XwXdXhXmXs
 	 * @return total milliseconds;time in words
 	 */
-	public static String evaluateTime (String s)
+	public static String evaluateTime(String s)
 	{
 		List<String> list = new ArrayList<String>();
 
@@ -183,7 +187,8 @@ public class C64Utils
 		StringBuilder sb = new StringBuilder();
 		for (String st : str)
 		{
-			if (st != null) append.add(st);
+			if (st != null)
+				append.add(st);
 		}
 		for (int i = 0; i < append.size(); i++)
 		{
@@ -203,7 +208,7 @@ public class C64Utils
 	/**
 	 * Returns time in xw-d-h-m-s *
 	 */
-	public static String formatTime (long ms)
+	public static String formatTime(long ms)
 	{
 
 		String[] units = new String[5];
@@ -220,7 +225,8 @@ public class C64Utils
 			if (!s.startsWith("0"))
 			{
 				sb.append(s);
-				if (!s.equals(units[units.length - 1])) sb.append("-");
+				if (!s.equals(units[units.length - 1]))
+					sb.append("-");
 			}
 
 		}
@@ -231,23 +237,25 @@ public class C64Utils
 	/**
 	 * Formats a location to world,x,y,z for saving *
 	 */
-	public static String packageLocation (Location l)
+	public static String packageLocation(Location l)
 	{
-		if (l == null) return null;
+		if (l == null)
+			return null;
 		return l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
 	}
 
 	/**
 	 * Returns a location from a location in the format world,x,y,z *
 	 */
-	public static Location unpackageLocation (String s)
+	public static Location unpackageLocation(String s)
 	{
-		if (s == null) return null;
+		if (s == null)
+			return null;
 		String[] split = s.split(",");
 		return new Location(Bukkit.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
 	}
 
-	public static String formatList (List<String> list, boolean and)
+	public static String formatList(List<String> list, boolean and)
 	{
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < list.size(); i++)
@@ -267,18 +275,18 @@ public class C64Utils
 	/**
 	 * Formats location to x, y, z in "world" *
 	 */
-	public static String formatLocation (Location l)
+	public static String formatLocation(Location l)
 	{
 		return l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + " in \"" + l.getWorld().getName() + "\"";
 	}
 
-	public static boolean hasPermission (CommandSender p, String string)
+	public static boolean hasPermission(CommandSender p, String string)
 	{
 		Permission perm = new Permission(string, PermissionDefault.FALSE);
 		return p.hasPermission(perm);
 	}
 
-	public static boolean isDouble (String s)
+	public static boolean isDouble(String s)
 	{
 		try
 		{
@@ -291,7 +299,7 @@ public class C64Utils
 
 	}
 
-	public static boolean isInteger (String s)
+	public static boolean isInteger(String s)
 	{
 		try
 		{
@@ -305,62 +313,70 @@ public class C64Utils
 	}
 
 
-	public static String limitString (String s, int maxLength)
+	public static String limitString(String s, int maxLength)
 	{
-		if (s.length() < maxLength) return s;
+		if (s.length() < maxLength)
+			return s;
 
 		return s.substring(0, maxLength - 3) + "...";
 	}
 
-	public static String limitString (String s)
+	public static String limitString(String s)
 	{
 		return limitString(s, 40);
 	}
 
 
-	public static boolean isDoubleChest (Chest c)
+	public static boolean isDoubleChest(Chest c)
 	{
-		if (c.getBlock().getRelative(BlockFace.EAST).getTypeId() == c.getTypeId()) return true;
-		else if (c.getBlock().getRelative(BlockFace.WEST).getTypeId() == c.getTypeId()) return true;
-		else if (c.getBlock().getRelative(BlockFace.NORTH).getTypeId() == c.getTypeId()) return true;
-		else if (c.getBlock().getRelative(BlockFace.SOUTH).getTypeId() == c.getTypeId()) return true;
+		if (c.getBlock().getRelative(BlockFace.EAST).getTypeId() == c.getTypeId())
+			return true;
+		else if (c.getBlock().getRelative(BlockFace.WEST).getTypeId() == c.getTypeId())
+			return true;
+		else if (c.getBlock().getRelative(BlockFace.NORTH).getTypeId() == c.getTypeId())
+			return true;
+		else if (c.getBlock().getRelative(BlockFace.SOUTH).getTypeId() == c.getTypeId())
+			return true;
 
-		else return false;
+		else
+			return false;
 	}
 
-	public static String getEntityName (LivingEntity e)
+	public static String getEntityName(LivingEntity e)
 	{
 		return e instanceof Player ? ((Player) e).getName() : e.getCustomName() == null ? "&ba &6" + e.getType().toString().toLowerCase().replaceAll("_", " ") : e.getCustomName();
 	}
 
-	public static void effectBetweenLocations (final Location from, final Location to, final ParticleEffect effect)
+	public static String getFriendlyMaterial(int id)
 	{
-		//		Vector direction = new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getY());
+		return Material.getMaterial(id).toString().toLowerCase().replaceAll("_", " ");
+	}
+
+
+	public static void effectBetweenLocations(final Location from, final Location to, final ParticleEffect effect, final int strength)
+	{
+		// Vector direction = new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getY());
 		Vector vector = to.toVector().subtract(from.toVector());
-		int dist = (int) to.distance(from);
+		final int dist = (int) to.distance(from);
+
 		final BlockIterator bi = new BlockIterator(from.getWorld(), from.toVector(), vector, 0, (dist > 100 ? 100 : dist));
 
 		new BukkitRunnable()
 		{
 			Block b;
 
-			public void run ()
+			public void run()
 			{
 				try
 				{
 					b = bi.next();
 					b = bi.next();
 					if (b.getLocation().equals(to))
-					{
 						cancel();
-						//						System.out.println("reached end");
-					}
 
-
-					ParticleEffect.sendToLocation(effect, b.getLocation(), 1, 1, 1, 0, 5);
+					ParticleEffect.sendToLocation(effect, b.getLocation(), 1, 1, 1, 1, strength);
 				} catch (NoSuchElementException e)
 				{
-					//					System.out.println("no more");
 					cancel();
 				}
 

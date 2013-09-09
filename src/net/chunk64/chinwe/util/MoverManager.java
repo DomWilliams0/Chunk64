@@ -68,7 +68,8 @@ public class MoverManager implements Listener
 					}
 
 
-					if (DISALLOWED_BLOCKS.contains(target.getTypeId())) return;
+					if (DISALLOWED_BLOCKS.contains(target.getTypeId()))
+						return;
 
 
 					blockSelection.put(p.getName(), target.getLocation());
@@ -116,10 +117,12 @@ public class MoverManager implements Listener
 
 
 								// Remove if not sneaking
-								if (!p.isSneaking()) entitySelection.remove(p.getName());
+								if (!p.isSneaking())
+									entitySelection.remove(p.getName());
 
 								// We don't need this anymore
-								if (playerEntities.contains(p.getName())) playerEntities.remove(p.getName());
+								if (playerEntities.contains(p.getName()))
+									playerEntities.remove(p.getName());
 							}
 						}.runTaskLater(Chunk64.c64, (long) (distance));
 						C64Utils.effectBetweenLocations(eLoc, finalTarget.getLocation(), ParticleEffect.RED_DUST, 20);
@@ -127,14 +130,17 @@ public class MoverManager implements Listener
 						return;
 					}
 
-					if (!blockSelection.containsKey(p.getName())) return;
+					if (!blockSelection.containsKey(p.getName()))
+						return;
 
 					// Move block
-					if (blockSelection.get(p.getName()).getWorld() != event.getPlayer().getWorld()) return;
+					if (blockSelection.get(p.getName()).getWorld() != event.getPlayer().getWorld())
+						return;
 
 					final Block b = p.getWorld().getBlockAt(blockSelection.get(p.getName()));
 
-					if (DISALLOWED_BLOCKS.contains(target.getTypeId())) return;
+					if (DISALLOWED_BLOCKS.contains(target.getTypeId()))
+						return;
 
 					final Block finalTarget = getEmptyBlock(target);
 					double distance = target.getLocation().distance(b.getLocation());
@@ -151,8 +157,10 @@ public class MoverManager implements Listener
 							ParticleEffect.sendToLocation(ParticleEffect.LARGE_SMOKE, finalTarget.getLocation(), 1, 1, 1, 0, 3);
 
 							// Update selection, or remove if it doesn't exist anymore/player is sneaking
-							if (finalTarget.getTypeId() == 0 || p.isSneaking()) blockSelection.remove(p.getName());
-							else blockSelection.put(p.getName(), finalTarget.getLocation());
+							if (finalTarget.getTypeId() == 0 || p.isSneaking())
+								blockSelection.remove(p.getName());
+							else
+								blockSelection.put(p.getName(), finalTarget.getLocation());
 						}
 					}.runTaskLater(Chunk64.c64, (long) (distance));
 
@@ -160,6 +168,7 @@ public class MoverManager implements Listener
 					b.setTypeId(0);
 					b.getWorld().playSound(b.getLocation(), Sound.CHICKEN_EGG_POP, 0.4F, 1);
 
+					// TODO Sometimes throws a NPE
 					C64Utils.effectBetweenLocations(b.getLocation(), finalTarget.getLocation(), ParticleEffect.MAGIC_CRIT, 10);
 
 				}
@@ -175,10 +184,19 @@ public class MoverManager implements Listener
 			Player p = event.getPlayer();
 			if (p.getItemInHand() != null && p.getItemInHand().getTypeId() == Config.MoverTool)
 			{
-				//				if (event.getRightClicked() instanceof LivingEntity)
+				if (event.getRightClicked() instanceof Player)
+				{
+					if (Config.Owners.contains(((Player) event.getRightClicked()).getName()) && Config.ExemptOwners)
+					{
+						p.damage(0);
+						return;
+					}
+				}
+
 				entitySelection.put(p.getName(), event.getRightClicked().getUniqueId());
 				p.playEffect(event.getRightClicked().getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
-				if (!playerEntities.contains(p.getName())) playerEntities.add(p.getName());
+				if (!playerEntities.contains(p.getName()))
+					playerEntities.add(p.getName());
 
 				event.setCancelled(true);
 			}
@@ -191,8 +209,10 @@ public class MoverManager implements Listener
 
 	public static void removeSelections(String player)
 	{
-		if (blockSelection.containsKey(player)) blockSelection.remove(player);
-		if (entitySelection.containsKey(player)) entitySelection.remove(player);
+		if (blockSelection.containsKey(player))
+			blockSelection.remove(player);
+		if (entitySelection.containsKey(player))
+			entitySelection.remove(player);
 		// TODO remove entity
 
 	}
@@ -201,13 +221,20 @@ public class MoverManager implements Listener
 	{
 		BlockFace bf = null;
 		List<Integer> transparents = Arrays.asList(0, 31, 32);
-		if (transparents.contains(b.getTypeId())) bf = null;
-		else if (b.getRelative(BlockFace.UP).getTypeId() == 0) bf = BlockFace.UP;
-		else if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) bf = BlockFace.DOWN;
-		else if (b.getRelative(BlockFace.EAST).getTypeId() == 0) bf = BlockFace.EAST;
-		else if (b.getRelative(BlockFace.WEST).getTypeId() == 0) bf = BlockFace.WEST;
-		else if (b.getRelative(BlockFace.NORTH).getTypeId() == 0) bf = BlockFace.NORTH;
-		else if (b.getRelative(BlockFace.SOUTH).getTypeId() == 0) bf = BlockFace.SOUTH;
+		if (transparents.contains(b.getTypeId()))
+			bf = null;
+		else if (b.getRelative(BlockFace.UP).getTypeId() == 0)
+			bf = BlockFace.UP;
+		else if (b.getRelative(BlockFace.DOWN).getTypeId() == 0)
+			bf = BlockFace.DOWN;
+		else if (b.getRelative(BlockFace.EAST).getTypeId() == 0)
+			bf = BlockFace.EAST;
+		else if (b.getRelative(BlockFace.WEST).getTypeId() == 0)
+			bf = BlockFace.WEST;
+		else if (b.getRelative(BlockFace.NORTH).getTypeId() == 0)
+			bf = BlockFace.NORTH;
+		else if (b.getRelative(BlockFace.SOUTH).getTypeId() == 0)
+			bf = BlockFace.SOUTH;
 
 		return bf == null ? b : b.getRelative(bf);
 	}

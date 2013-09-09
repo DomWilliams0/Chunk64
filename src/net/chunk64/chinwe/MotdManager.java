@@ -19,7 +19,7 @@ public class MotdManager
 	private FileConfiguration yml = null;
 	private String override;
 
-	public MotdManager ()
+	public MotdManager()
 	{
 		// Create file
 		if (!file.exists())
@@ -40,24 +40,25 @@ public class MotdManager
 		else
 			C64Utils.info("motds.yml found and loaded.");
 
-		if (yml == null) yml = YamlConfiguration.loadConfiguration(file);
+		if (yml == null)
+			yml = YamlConfiguration.loadConfiguration(file);
 
 		motds = yml.getStringList("motds");
 
 	}
 
-	public List<String> getMotds ()
+	public List<String> getMotds()
 	{
 		return motds;
 	}
 
-	public void setMotds (List<String> motds)
+	public void setMotds(List<String> motds)
 	{
 		this.motds = motds;
 		yml.set("motds", motds);
 	}
 
-	public void addMotd (String s) throws IllegalArgumentException
+	public void addMotd(String s) throws IllegalArgumentException
 	{
 		List<String> current = getMotds();
 		if (!current.contains(s))
@@ -69,7 +70,7 @@ public class MotdManager
 			throw new IllegalArgumentException("That MOTD already exists!");
 	}
 
-	public void deleteMotd (String s) throws IllegalArgumentException
+	public void deleteMotd(String s) throws IllegalArgumentException
 	{
 		List<String> current = getMotds();
 		if (current.contains(s))
@@ -82,20 +83,21 @@ public class MotdManager
 
 	}
 
-	public String getMotd (int index, boolean elseNull)
+	public String getMotd(int index, boolean elseNull)
 	{
 		try
 		{
 			return getMotds().get(index);
 		} catch (ArrayIndexOutOfBoundsException e)
 		{
-			if (getMotds().size() >= 1 && !elseNull) return getMotds().get(0);
+			if (getMotds().size() >= 1 && !elseNull)
+				return getMotds().get(0);
 			else
 				return null;
 		}
 	}
 
-	public void save ()
+	public void save()
 	{
 		try
 		{
@@ -110,23 +112,23 @@ public class MotdManager
 	 * @param motd MOTD
 	 * @return [index] of specified MOTD
 	 */
-	public static String getIndex (String motd)
+	public static String getIndex(String motd)
 	{
 		return "&8[&3" + motds.indexOf(motd) + "&8]";
 	}
 
-	public String next ()
+	public String next()
 	{
 		return motds.get(Chunk64.random.nextInt(motds.size()));
 	}
 
 
-	public String getOverride ()
+	public String getOverride()
 	{
 		return override;
 	}
 
-	public void setOverride (String override)
+	public void setOverride(String override)
 	{
 		this.override = override;
 	}

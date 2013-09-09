@@ -16,7 +16,7 @@ public class TimeParser
 	 * @param string String to convert to milliseconds
 	 * @return Milliseconds
 	 */
-	public static long parseString (String string)
+	public static long parseString(String string)
 	{
 		List<String> list = new ArrayList<String>();
 
@@ -65,7 +65,8 @@ public class TimeParser
 			}
 		}
 
-		if (total == 0) return -1;
+		if (total == 0)
+			return -1;
 
 		return total;
 	}
@@ -75,7 +76,7 @@ public class TimeParser
 	 * @param abbreviate   For example, if true, 293000 -> "10m-53s", otherwise "10 minutes and 53 seconds"
 	 * @return Time in words
 	 */
-	public static String parseLong (long milliseconds, boolean abbreviate)
+	public static String parseLong(long milliseconds, boolean abbreviate)
 	{
 		//        String[] units = new String[5];
 		List<String> units = new ArrayList<String>();
@@ -120,7 +121,8 @@ public class TimeParser
 
 		units.clear();
 		for (String s : array)
-			if (!s.startsWith("0")) units.add(s);
+			if (!s.startsWith("0"))
+				units.add(s);
 
 
 		// Append
@@ -157,8 +159,7 @@ public class TimeParser
 			} else
 			{
 				sb.append(s);
-				if (!s.equals(units.get(units.size() - 1)))
-					sb.append("-");
+				if (!s.equals(units.get(units.size() - 1))) sb.append("-");
 			}
 
 

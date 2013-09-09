@@ -3,7 +3,6 @@ package net.chunk64.chinwe.commands;
 import net.chunk64.chinwe.PlayerData;
 import net.chunk64.chinwe.util.C64Utils;
 import net.chunk64.chinwe.util.CommandUtils;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,12 +17,13 @@ public class Command_playerinfo implements CommandExecutor
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				// Help
 				if (args.length == 0)
 				{
-					CommandUtils.sendHelp(sender, "PlayerInfo Help", label, ";View this help menu", "<player>;View basic information about a player", "ip <player>;Lookup a player's IPs and possible alts","time <player>;View a player's total play time");
+					CommandUtils.sendHelp(sender, "PlayerInfo Help", label, ";View this help menu", "<player>;View basic information about a player", "ip <player>;Lookup a player's IPs and possible alts", "time <player>;View a player's total play time");
 					return true;
 				}
 
@@ -38,7 +38,8 @@ public class Command_playerinfo implements CommandExecutor
 				{
 
 					PlayerData pd = PlayerData.getData(args[1]);
-					if (!CommandUtils.isValidData(sender, pd)) return true;
+					if (!CommandUtils.isValidData(sender, pd))
+						return true;
 
 					// Ips and alts
 					if (args[0].equalsIgnoreCase("ip"))
@@ -51,7 +52,8 @@ public class Command_playerinfo implements CommandExecutor
 
 						C64Utils.message(sender, sb.toString().trim());
 
-						if (pd.getAlts().size() != 0) C64Utils.message(sender, "&cPossible alts: " + C64Utils.formatList(pd.getAlts(), true));
+						if (pd.getAlts().size() != 0)
+							C64Utils.message(sender, "&cPossible alts: " + C64Utils.formatList(pd.getAlts(), true));
 
 						return true;
 					}
@@ -64,8 +66,7 @@ public class Command_playerinfo implements CommandExecutor
 						if (pd.getPlayTime() == 0 && pd.getLoginTime() == 0)
 						{
 							C64Utils.message(sender, "&6" + pd.getName().toUpperCase() + " &bhas not played for &6even a second&b!");
-						}
-						else
+						} else
 							C64Utils.message(sender, "&bIn total, &6" + pd.getName().toUpperCase() + " &bhas played for &6" + C64Utils.formatTime(pd.getLivePlayTime()));
 						return true;
 					}

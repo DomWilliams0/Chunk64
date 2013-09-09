@@ -21,16 +21,18 @@ public class Command_staffchat implements CommandExecutor
 	public static List<String> staffChatters = new ArrayList<String>();
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 
-				if (args.length == 0) throw new IllegalArgumentException("Enter a message!");
+				if (args.length == 0)
+					throw new IllegalArgumentException("Enter a message!");
 
 				String message = StringUtils.join(Arrays.asList(args), " ");
 
@@ -48,10 +50,12 @@ public class Command_staffchat implements CommandExecutor
 			}
 			CommandUtils.sendUsage(sender, cmd, false);
 
-
 			return true;
 		} else if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this) + "toggle"))
 		{
+			if (!CommandUtils.canUse(sender, cmd))
+				return true;
+
 			if (staffChatters.contains(sender.getName()))
 				staffChatters.remove(sender.getName());
 			else
@@ -65,7 +69,7 @@ public class Command_staffchat implements CommandExecutor
 		return true;
 	}
 
-	public static void staffChat (CommandSender sender, String msg)
+	public static void staffChat(CommandSender sender, String msg)
 	{
 		for (Player p : Bukkit.getOnlinePlayers())
 			if (C64Utils.hasPermission(p, "chunk64.staffchat") || p.isOp())

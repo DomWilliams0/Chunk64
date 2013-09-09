@@ -87,3 +87,18 @@ commands:
     description: View player notes commands
     permission-message: all
     aliases: [cnotes]
+  spook:
+    usage: /<command>
+    description: View player spooking commands
+    permission-message: player-only
+    aliases: [scare, cspook]
+  mover:
+    usage: /<command>
+    description: Toggle the Mover
+    permission-message: player-only
+    aliases: [cmove, mover, cmover]
+  handyhelper:
+    usage: /<command> [help]
+    description: Toggle the handy helper
+    permission-message: player-only
+    aliases: [hh, handy]

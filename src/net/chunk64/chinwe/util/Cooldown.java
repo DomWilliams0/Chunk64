@@ -35,7 +35,10 @@ public class Cooldown
 			PlayerCooldown pc = it.next();
 			if (pc.getCooldownName().equalsIgnoreCase(cooldownName))
 			{
-				if (pc.getPlayerName().equalsIgnoreCase(playerName)) { return pc; }
+				if (pc.getPlayerName().equalsIgnoreCase(playerName))
+				{
+					return pc;
+				}
 			}
 		}
 		return null;

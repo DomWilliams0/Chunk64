@@ -7,41 +7,41 @@ public class Note
 	private String message, creator;
 	private long time;
 
-	public Note (String message, String creator)
+	public Note(String message, String creator)
 	{
 		this.message = message;
 		this.creator = creator;
 		this.time = System.currentTimeMillis();
 	}
 
-	public Note (String message, String creator, long time)
+	public Note(String message, String creator, long time)
 	{
 		this.message = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', message));
 		this.creator = creator;
 		this.time = time;
 	}
 
-	public String getMessage ()
+	public String getMessage()
 	{
 		return message;
 	}
 
-	public long getTime ()
+	public long getTime()
 	{
 		return time;
 	}
 
-	public void setTime (long time)
+	public void setTime(long time)
 	{
 		this.time = time;
 	}
 
-	public String getCreator ()
+	public String getCreator()
 	{
 		return creator;
 	}
 
-	public String toString ()
+	public String toString()
 	{
 		return packageNote(this);
 	}
@@ -49,12 +49,12 @@ public class Note
 	/**
 	 * Packages up note for storage in format time|creator|message
 	 */
-	public static String packageNote (Note note)
+	public static String packageNote(Note note)
 	{
 		return note.getTime() + ";" + note.getCreator() + ";" + note.getMessage();
 	}
 
-	public static Note unpackageNote (String packagedNote)
+	public static Note unpackageNote(String packagedNote)
 	{
 		String[] split = packagedNote.split(";");
 		return new Note(split[2], split[1], Long.parseLong(split[0]));

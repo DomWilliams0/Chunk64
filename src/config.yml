@@ -30,6 +30,12 @@ exempt-owners: false
 # This is the ID of the measure stick (286 = gold axe)
 measure-stick: 286
 
+# This is the ID of the Mover toggled with /mover (369 = blaze rod)
+mover-tool: 369
+
+# This is the ID of the HandyHelper toggled with /handyhelper (280 = stick)
+handy-helper: 280
+
 # This will appear before all MOTDs on the server list
 # Please leave it surrounded with 'quotes' to be safe from errors
 # Set to 'none' to disable random MOTDs: the only one to be shown will be the one specified in server.properties

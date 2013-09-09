@@ -18,13 +18,14 @@ public class Command_store implements CommandExecutor
 
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				// Help
 				if (args.length == 0)
@@ -36,7 +37,8 @@ public class Command_store implements CommandExecutor
 				InventoryStore store = Chunk64.store;
 				Player p = (Player) sender;
 
-				// Inv
+				// TODO Add to chest inventory instead of overriding
+
 				if (args.length == 1 && (args[0].equalsIgnoreCase("inv")) || args[0].equalsIgnoreCase("chest"))
 				{
 					String status;
@@ -66,21 +68,17 @@ public class Command_store implements CommandExecutor
 						}
 
 						Chest chest = (Chest) target.getState();
-
-						if (store.isEmpty(p.getInventory()) && !store.isEmpty(chest.getInventory()))
+						if (!store.shouldStore(chest, p))
 						{
 							store.retrieveFromChest(p, chest);
 							status = "&bYou &6retrieved&b your inventory from &6that chest&b!";
-							C64Utils.effectBetweenLocations(chest.getLocation(), p.getEyeLocation(), ParticleEffect.WITCH_MAGIC);
+							C64Utils.effectBetweenLocations(chest.getLocation(), p.getEyeLocation(), ParticleEffect.WITCH_MAGIC, 5);
 						} else
 						{
 							store.storeInChest(p, chest);
 							status = "&bYou &6stored&b your inventory in &6that chest&b!";
-							C64Utils.effectBetweenLocations(p.getEyeLocation(), chest.getLocation(), ParticleEffect.WITCH_MAGIC);
+							C64Utils.effectBetweenLocations(p.getEyeLocation(), chest.getLocation(), ParticleEffect.WITCH_MAGIC, 5);
 						}
-
-						// TODO Play effect on chest(s)
-						// TODO Kapooya block iterator/effect shoot from/into chest from player
 
 
 					}

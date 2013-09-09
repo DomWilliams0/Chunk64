@@ -3,7 +3,6 @@ package net.chunk64.chinwe.commands;
 import net.chunk64.chinwe.Chunk64;
 import net.chunk64.chinwe.util.C64Utils;
 import net.chunk64.chinwe.util.CommandUtils;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,10 +19,11 @@ public class Command_plugintoggle implements CommandExecutor
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
-			
+
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				PluginManager pm = Chunk64.c64.getServer().getPluginManager();
 
@@ -52,7 +52,7 @@ public class Command_plugintoggle implements CommandExecutor
 						throw new IllegalArgumentException("&cCannot find a loaded plugin with the name \"" + args[0] + "\"!");
 
 					if (pl != null && pl.getName().equals(Chunk64.c64.getName()))
-						throw new IllegalArgumentException("&cCould not disable " + pl.getName());
+						throw new IllegalArgumentException("&cCould not disable " + pl.getName() + "!");
 
 					// All
 					int count = 0;
@@ -62,10 +62,8 @@ public class Command_plugintoggle implements CommandExecutor
 						{
 							if (!p.getName().equals(Chunk64.c64.getName()))
 							{
-								if (!allDisabled)
-									pm.disablePlugin(p);
-								else
-									pm.enablePlugin(p);
+								if (!allDisabled) pm.disablePlugin(p);
+								else pm.enablePlugin(p);
 								count++;
 							}
 						}
@@ -74,10 +72,8 @@ public class Command_plugintoggle implements CommandExecutor
 					// Specific
 					else
 					{
-						if (pm.isPluginEnabled(pl))
-							pm.disablePlugin(pl);
-						else
-							pm.enablePlugin(pl);
+						if (pm.isPluginEnabled(pl)) pm.disablePlugin(pl);
+						else pm.enablePlugin(pl);
 					}
 
 					String status = pl == null ? allDisabled ? "disabled" : "enabled" : pm.isPluginEnabled(pl) ? "enabled" : "disabled";

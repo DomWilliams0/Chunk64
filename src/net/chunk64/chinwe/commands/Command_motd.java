@@ -15,18 +15,19 @@ public class Command_motd implements CommandExecutor
 {
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				// Help
 				if (args.length == 0)
 				{
-					CommandUtils.sendHelp(sender, "MOTD Help", label, ";View this help menu", "add <motd>;Add a MOTD", "list;List all MOTDs", "del <index>;Delete the specified MOTD", "clear;Delete all MOTDs","temp;Clear any temporary MOTD", "temp <motd>;Set a temporary, override MOTD;Only this MOTD will be showed");
+					CommandUtils.sendHelp(sender, "MOTD Help", label, ";View this help menu", "add <motd>;Add a MOTD", "list;List all MOTDs", "del <index>;Delete the specified MOTD", "clear;Delete all MOTDs", "temp;Clear any temporary MOTD", "temp <motd>;Set a temporary, override MOTD;Only this MOTD will be showed");
 					return true;
 				}
 
@@ -36,8 +37,7 @@ public class Command_motd implements CommandExecutor
 				// List
 				if (args.length == 1 && args[0].equalsIgnoreCase("list"))
 				{
-					if (m.getMotds().size() == 0)
-						throw new IllegalArgumentException("There are no MOTDs to list!");
+					if (m.getMotds().size() == 0) throw new IllegalArgumentException("There are no MOTDs to list!");
 
 					C64Utils.message(sender, "&bShowing &6" + m.getMotds().size() + " &bMOTD" + (m.getMotds().size() == 1 ? "" : "s") + ": ");
 					for (String s : m.getMotds())
@@ -50,7 +50,8 @@ public class Command_motd implements CommandExecutor
 				// Add
 				if (args.length >= 1 && args[0].equalsIgnoreCase("add"))
 				{
-					if (args.length == 1) throw new IllegalArgumentException("Enter a MOTD!");
+					if (args.length == 1)
+						throw new IllegalArgumentException("Enter a MOTD!");
 
 					String motd = StringUtils.join(args, " ", 1, args.length);
 
@@ -65,8 +66,7 @@ public class Command_motd implements CommandExecutor
 				// Delete
 				if (args.length == 2 && args[0].equalsIgnoreCase("del"))
 				{
-					if (!C64Utils.isInteger(args[1]))
-						throw new IllegalArgumentException("Please enter a number!");
+					if (!C64Utils.isInteger(args[1])) throw new IllegalArgumentException("Please enter a number!");
 
 					int index = Integer.parseInt(args[1]);
 
@@ -74,7 +74,8 @@ public class Command_motd implements CommandExecutor
 						throw new IllegalArgumentException("A MOTD with that index does not exist!");
 
 					String motd = m.getMotd(index, true);
-					if (motd == null) throw new IllegalArgumentException("Unspecified");
+					if (motd == null)
+						throw new IllegalArgumentException("Unspecified");
 					m.deleteMotd(motd);
 
 					C64Utils.message(sender, "&bDeleted MOTD &8[&3" + index + "&8]&b: &r&m" + C64Utils.limitString(motd));
@@ -87,7 +88,8 @@ public class Command_motd implements CommandExecutor
 				if (args.length == 1 && args[0].equalsIgnoreCase("clear"))
 				{
 					int a = m.getMotds().size();
-					if (a == 0) throw new IllegalArgumentException("There are no MOTDs to clear!");
+					if (a == 0)
+						throw new IllegalArgumentException("There are no MOTDs to clear!");
 
 					m.setMotds(new ArrayList<String>());
 					C64Utils.message(sender, "&bCleared all &6" + a + "&b MOTDs.");
@@ -103,8 +105,10 @@ public class Command_motd implements CommandExecutor
 					m.setOverride(override);
 
 					C64Utils.message(sender, "&bOverride " + (override == null ? "cleared." : "set to: &r" + C64Utils.limitString(override)));
-					if (override == null) C64Utils.notifyOps(sender.getName() + " cleared the override MOTD", sender.getName());
-					else C64Utils.notifyOps(sender.getName() + " set the the override MOTD to " + C64Utils.limitString(override), sender.getName());
+					if (override == null)
+						C64Utils.notifyOps(sender.getName() + " cleared the override MOTD", sender.getName());
+					else
+						C64Utils.notifyOps(sender.getName() + " set the the override MOTD to " + C64Utils.limitString(override), sender.getName());
 					return true;
 				}
 
@@ -122,7 +126,6 @@ public class Command_motd implements CommandExecutor
 
 		return true;
 	}
-
 
 
 }

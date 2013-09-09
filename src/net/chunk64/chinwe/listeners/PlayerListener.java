@@ -35,13 +35,13 @@ public class PlayerListener implements Listener
 	@SuppressWarnings("unused")
 	private Chunk64 plugin;
 
-	public PlayerListener (Chunk64 chunk64)
+	public PlayerListener(Chunk64 chunk64)
 	{
 		this.plugin = chunk64;
 	}
 
 	@EventHandler
-	public void onJoin (PlayerJoinEvent event)
+	public void onJoin(PlayerJoinEvent event)
 	{
 		// Load
 		PlayerData pd = new PlayerData(event.getPlayer().getName());
@@ -68,7 +68,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onQuit (PlayerQuitEvent event)
+	public void onQuit(PlayerQuitEvent event)
 	{
 		PlayerData pd = PlayerData.getData(event.getPlayer().getName());
 
@@ -99,7 +99,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onMove (PlayerMoveEvent event)
+	public void onMove(PlayerMoveEvent event)
 	{
 		if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ() && event.getFrom().getBlockY() == event.getTo().getBlockY())
 			return;
@@ -129,7 +129,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onBlockBreak (BlockBreakEvent event)
+	public void onBlockBreak(BlockBreakEvent event)
 	{
 		PlayerData pd = PlayerData.getData(event.getPlayer().getName());
 		if (pd.isHalted())
@@ -152,7 +152,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onBlockPlace (BlockPlaceEvent event)
+	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		PlayerData pd = PlayerData.getData(event.getPlayer().getName());
 		if (pd.isHalted())
@@ -175,13 +175,14 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onDamage (EntityDamageByEntityEvent event)
+	public void onDamage(EntityDamageByEntityEvent event)
 	{
 		if (event.getDamager() instanceof Player)
 		{
 			// Halted
 			PlayerData pd = PlayerData.getData(((Player) event.getDamager()).getName());
-			if (pd.isHalted()) event.setCancelled(true);
+			if (pd.isHalted())
+				event.setCancelled(true);
 
 			Player p = (Player) event.getDamager();
 
@@ -236,7 +237,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onEntityInteract (PlayerInteractEntityEvent event)
+	public void onEntityInteract(PlayerInteractEntityEvent event)
 	{
 		// Right clicking riding
 		if (Command_ride.toolUsers.contains(event.getPlayer().getName()) && event.getRightClicked() instanceof LivingEntity)
@@ -318,10 +319,11 @@ public class PlayerListener implements Listener
 	static BukkitTask ok;
 
 	@EventHandler
-	public void onInteract (PlayerInteractEvent event)
+	public void onInteract(PlayerInteractEvent event)
 	{
 		PlayerData pd = PlayerData.getData(event.getPlayer().getName());
-		if (pd.isHalted()) event.setCancelled(true);
+		if (pd.isHalted())
+			event.setCancelled(true);
 
 		// Measure
 		if (pd.getMeasureMode() != 0)
@@ -339,8 +341,7 @@ public class PlayerListener implements Listener
 				{
 					if (!Command_measure.setPoint(event.getPlayer().getName(), loc, leftClick))
 						C64Utils.message(event.getPlayer(), "&b" + (leftClick ? "1st" : "2nd") + " point set at &6" + C64Utils.formatLocation(loc));
-					else
-						Command_measure.getDistance(event.getPlayer());
+					else Command_measure.getDistance(event.getPlayer());
 				} catch (IllegalArgumentException e)
 				{
 					C64Utils.error(event.getPlayer(), e);
@@ -362,7 +363,7 @@ public class PlayerListener implements Listener
 					InventoryStore store = Chunk64.store;
 					String status;
 
-					if (store.isEmpty(p.getInventory()) && !store.isEmpty(c.getInventory()))
+					if (!store.shouldStore(c, p))
 					{
 						store.retrieveFromChest(p, c);
 						status = "&bYou &6retrieved&b your inventory from &6that chest&b!";
@@ -385,7 +386,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onChat (final AsyncPlayerChatEvent event)
+	public void onChat(final AsyncPlayerChatEvent event)
 	{
 		PlayerData pd = PlayerData.getData(event.getPlayer().getName());
 
@@ -418,7 +419,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onCommandPreProcess (PlayerCommandPreprocessEvent event)
+	public void onCommandPreProcess(PlayerCommandPreprocessEvent event)
 	{
 		PlayerData pd = PlayerData.getData(event.getPlayer().getName());
 
@@ -437,7 +438,7 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onPing (ServerListPingEvent event)
+	public void onPing(ServerListPingEvent event)
 	{
 		// MOTD
 		if (!Config.MotdPrefix.equalsIgnoreCase("none") && Chunk64.motdManager.getMotds().size() > 0)
@@ -451,12 +452,11 @@ public class PlayerListener implements Listener
 	}
 
 	@EventHandler
-	public void onLogin (PlayerLoginEvent event)
+	public void onLogin(PlayerLoginEvent event)
 	{
 		// Whitelist message
-		if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST)
-			if (!Config.WhitelistMessage.equals("none"))
-				event.setKickMessage(Config.WhitelistMessage.replace("[player]", event.getPlayer().getName()).replaceAll("&", "§").replace("[newline]", ChatColor.stripColor("\n")));
+		if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) if (!Config.WhitelistMessage.equals("none"))
+			event.setKickMessage(Config.WhitelistMessage.replace("[player]", event.getPlayer().getName()).replaceAll("&", "§").replace("[newline]", ChatColor.stripColor("\n")));
 
 	}
 
@@ -466,7 +466,7 @@ public class PlayerListener implements Listener
 	// Listen for enter cart, if have efefct set cart power, set back to normal
 	// when they exit
 	//	@EventHandler
-	public void onVehicleMove (VehicleMoveEvent event)
+	public void onVehicleMove(VehicleMoveEvent event)
 	{
 		if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ() && event.getFrom().getBlockY() == event.getTo().getBlockY())
 			return;

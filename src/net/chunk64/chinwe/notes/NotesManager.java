@@ -20,7 +20,7 @@ public class NotesManager
 	private Map<String, List<Note>> notes = new HashMap<>();
 
 
-	public NotesManager (boolean log)
+	public NotesManager(boolean log)
 	{
 		file = new File(Chunk64.c64.getDataFolder(), "notes.yml");
 		if (!file.exists())
@@ -32,8 +32,10 @@ public class NotesManager
 			{
 				C64Utils.severe("Could not create notes.yml");
 			}
-			if (log) C64Utils.warning("notes.yml not found, creating...");
-		} else if (log) C64Utils.info("notes.yml found and loaded.");
+			if (log)
+				C64Utils.warning("notes.yml not found, creating...");
+		} else if (log)
+			C64Utils.info("notes.yml found and loaded.");
 
 		yml = YamlConfiguration.loadConfiguration(file);
 		yml.options().header("This is where all player notes are stored.\nUse /notes ingame to view the commands");
@@ -43,7 +45,7 @@ public class NotesManager
 	/**
 	 * Only saves the file, save each player notes with saveNotes(player)
 	 */
-	public void save ()
+	public void save()
 	{
 		try
 		{
@@ -54,12 +56,13 @@ public class NotesManager
 		}
 	}
 
-	public void load ()
+	public void load()
 	{
 		try
 		{
 
-			if (!yml.contains("notes")) return;
+			if (!yml.contains("notes"))
+				return;
 
 			List<Note> noteList;
 			for (String player : yml.getConfigurationSection("notes").getKeys(false))
@@ -76,7 +79,7 @@ public class NotesManager
 		}
 	}
 
-	public boolean hasNotes (String playerName)
+	public boolean hasNotes(String playerName)
 	{
 		return notes.containsKey(playerName.toLowerCase());
 	}
@@ -84,17 +87,17 @@ public class NotesManager
 	/**
 	 * Returns an empty list if player has no notes
 	 */
-	public List<Note> getNotes (String playerName)
+	public List<Note> getNotes(String playerName)
 	{
 		return hasNotes(playerName) ? notes.get(playerName.toLowerCase()) : new ArrayList<Note>();
 	}
 
-	public void setNotes (String playerName, List<Note> noteList)
+	public void setNotes(String playerName, List<Note> noteList)
 	{
 		notes.put(playerName.toLowerCase(), noteList);
 	}
 
-	public void addNote (String playerName, Note note)
+	public void addNote(String playerName, Note note)
 	{
 		List<Note> current = getNotes(playerName);
 		current.add(note);
@@ -105,11 +108,10 @@ public class NotesManager
 	/**
 	 * Returns true if a player already has a note with ONLY the same message, otherwise false
 	 */
-	public boolean hasNote (String playerName, Note note)
+	public boolean hasNote(String playerName, Note note)
 	{
 		for (Note n : getNotes(playerName))
-			if (n.getMessage().equalsIgnoreCase(note.getMessage()))
-				return true;
+			if (n.getMessage().equalsIgnoreCase(note.getMessage())) return true;
 
 		return false;
 	}
@@ -117,15 +119,16 @@ public class NotesManager
 	public void deleteNote(String playerName, Note note)
 	{
 		List<Note> current = getNotes(playerName);
-		if (!current.contains(note)) return;
+		if (!current.contains(note))
+			return;
 		current.remove(note);
 		setNotes(playerName, current);
-		saveNotes(playerName,  current);
+		saveNotes(playerName, current);
 
 	}
 
 
-	private void saveNotes (String playerName, List<Note> noteList)
+	private void saveNotes(String playerName, List<Note> noteList)
 	{
 		List<String> packaged = new ArrayList<String>();
 		for (Note n : noteList)

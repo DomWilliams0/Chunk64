@@ -1,17 +1,16 @@
 package net.chunk64.chinwe;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.chunk64.chinwe.util.C64Utils;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerData
 {
@@ -25,12 +24,14 @@ public class PlayerData
 	private long unhaltTime, playTime, loginTime, unmuteTime;
 	private List<String> ips, possibleAlts;
 	private int measureMode;
+	private SpookManager.SpookMode spookMode;
 
 	public PlayerData(String name)
 	{
 		this.name = name.toLowerCase();
 
-		if (!dir.exists()) dir.mkdirs();
+		if (!dir.exists())
+			dir.mkdirs();
 
 		file = getFile(name);
 		yml = YamlConfiguration.loadConfiguration(file);
@@ -45,10 +46,10 @@ public class PlayerData
 
 	}
 
-	public static boolean fileExists(String name)
-	{
-		return getFile(name).exists();
-	}
+	//	public static boolean fileExists(String name)
+	//	{
+	//		return getFile(name).exists();
+	//	}
 
 	public void load()
 	{
@@ -68,6 +69,7 @@ public class PlayerData
 			this.possibleAlts = yml.getStringList("possible-alts");
 			this.unmuteTime = yml.getLong("timestamps.unmute-time");
 			this.setMeasureMode(yml.getInt("measure-mode"));
+			this.spookMode = SpookManager.SpookMode.get(yml.getString("spook-mode")); // must be exact
 		}
 	}
 
@@ -86,18 +88,23 @@ public class PlayerData
 	public static boolean isLoaded(String name)
 	{
 		for (PlayerData pd : Chunk64.playerData)
-			if (pd.getName().equals(name)) return true;
+			if (pd.getName().equals(name))
+				return true;
 		return false;
 
 	}
 
-	/** Gets an online or offline player's PlayerData, otherwise null **/
+	/**
+	 * Gets an online or offline player's PlayerData, otherwise null
+	 */
 	public static PlayerData getData(String name)
 	{
-		if (Bukkit.getPlayer(name) != null) name = Bukkit.getPlayer(name).getName();
+		if (Bukkit.getPlayer(name) != null)
+			name = Bukkit.getPlayer(name).getName();
 
 		for (PlayerData pd : Chunk64.playerData)
-			if (pd.getName().equalsIgnoreCase(name)) return pd;
+			if (pd.getName().equalsIgnoreCase(name))
+				return pd;
 
 		for (File f : dir.listFiles())
 		{
@@ -115,14 +122,15 @@ public class PlayerData
 	private static File getFile(String name)
 	{
 		File f = new File(dir, name.toLowerCase() + ".yml");
-		if (!f.exists()) try
-		{
-			f.createNewFile();
-		} catch (IOException e)
-		{
-			C64Utils.severe("Could not create " + f.getName());
-			e.printStackTrace();
-		}
+		if (!f.exists())
+			try
+			{
+				f.createNewFile();
+			} catch (IOException e)
+			{
+				C64Utils.severe("Could not create " + f.getName());
+				e.printStackTrace();
+			}
 		return f;
 
 	}
@@ -150,7 +158,26 @@ public class PlayerData
 		return getPlayer() != null;
 	}
 
+	/**
+	 * Unloads as well if player is offline
+	 */
 	public void save()
+	{
+		try
+		{
+			yml.save(file);
+			if (!isOnline())
+				unload();
+		} catch (Exception e)
+		{
+			C64Utils.severe("Could not save playerdata for " + name);
+		}
+	}
+
+	/**
+	 * Does not unload if player is offline
+	 */
+	public void saveOnly()
 	{
 		try
 		{
@@ -242,7 +269,7 @@ public class PlayerData
 	{
 		return playTime;
 	}
-	
+
 	public long getLivePlayTime()
 	{
 		return playTime + (isOnline() ? (System.currentTimeMillis() - getLoginTime()) : 0);
@@ -275,13 +302,15 @@ public class PlayerData
 		this.unmuteTime = unmuteTime;
 		yml.set("timestamps.unmute-time", unmuteTime <= 0 ? null : unmuteTime);
 	}
-	
+
 	public boolean isMuted()
 	{
 		return unmuteTime > 0;
 	}
 
-	/** 0 = disabled, 1 = xyz, 2 = overall distance **/
+	/**
+	 * 0 = disabled, 1 = xyz, 2 = overall distance *
+	 */
 	public int getMeasureMode()
 	{
 		return measureMode;
@@ -294,4 +323,14 @@ public class PlayerData
 	}
 
 
+	public SpookManager.SpookMode getSpookMode()
+	{
+		return spookMode;
+	}
+
+	public void setSpookMode(SpookManager.SpookMode spookMode)
+	{
+		this.spookMode = spookMode;
+		yml.set("spook-mode", spookMode == SpookManager.SpookMode.NONE ? null : spookMode.toString().toLowerCase());
+	}
 }

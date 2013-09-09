@@ -15,15 +15,17 @@ public class Command_measure implements CommandExecutor
 {
 
 	public static Map<String, Location[]> measurePoints = new HashMap<String, Location[]>();
+	// TODO Tell player id of tool
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				PlayerData pd = PlayerData.getData(sender.getName());
 				String status = null;
@@ -72,7 +74,7 @@ public class Command_measure implements CommandExecutor
 	 * @param leftClick If click was left click
 	 * @return True if both points are set, false otherwise
 	 */
-	public static boolean setPoint (String name, Location l, boolean leftClick) throws IllegalArgumentException
+	public static boolean setPoint(String name, Location l, boolean leftClick) throws IllegalArgumentException
 	{
 
 		Location[] locs = measurePoints.containsKey(name) ? measurePoints.get(name) : new Location[2];
@@ -81,8 +83,7 @@ public class Command_measure implements CommandExecutor
 		{
 			locs[0] = l;
 			locs[1] = null; // reset second point
-		} else
-			locs[1] = l;
+		} else locs[1] = l;
 
 		measurePoints.put(name, locs);
 
@@ -96,11 +97,13 @@ public class Command_measure implements CommandExecutor
 		return false;
 	}
 
-	public static void getDistance (CommandSender sender)
+	public static void getDistance(CommandSender sender)
 	{
-		if (!measurePoints.containsKey(sender.getName())) return;
+		if (!measurePoints.containsKey(sender.getName()))
+			return;
 		PlayerData pd = PlayerData.getData(sender.getName());
-		if (pd == null) return;
+		if (pd == null)
+			return;
 
 		Location[] locs = measurePoints.get(sender.getName());
 
@@ -113,8 +116,7 @@ public class Command_measure implements CommandExecutor
 			C64Utils.message(sender, "&bY: &6" + (locs[0].getBlockY() - locs[1].getBlockY()));
 			C64Utils.message(sender, "&bZ: &6" + (locs[0].getBlockZ() - locs[1].getBlockZ()));
 			C64Utils.message(sender, "&8---");
-		} else
-			C64Utils.message(sender, "&bDistance: &6" + locs[0].distance(locs[1]));
+		} else C64Utils.message(sender, "&bDistance: &6" + locs[0].distance(locs[1]));
 
 	}
 

@@ -20,13 +20,14 @@ public class Command_ride implements CommandExecutor
 	public static HashMap<String, ArrayList<Integer>> entitiesToStack = new HashMap<String, ArrayList<Integer>>();
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 				// TODO Eject command, eject <player> , /eject yourself (whole stack), or click
 
 				// Help
@@ -53,10 +54,8 @@ public class Command_ride implements CommandExecutor
 					// Tools
 					if (args[0].equalsIgnoreCase("toggle"))
 					{
-						if (toolUsers.contains(sender.getName()))
-							toolUsers.remove(sender.getName());
-						else
-							toolUsers.add(sender.getName());
+						if (toolUsers.contains(sender.getName())) toolUsers.remove(sender.getName());
+						else toolUsers.add(sender.getName());
 
 						C64Utils.message(sender, "&bSaddle riding " + (toolUsers.contains(sender.getName()) ? "enabled! " +
 								"\n&6Using a saddle: &7Right click entities to ride them, left click them to make them ride you" +
@@ -72,9 +71,11 @@ public class Command_ride implements CommandExecutor
 				if (args[0].equalsIgnoreCase("eject"))
 				{
 					Player target = args.length == 1 ? psender : Bukkit.getPlayer(args[1]);
-					if (target == null) throw new IllegalArgumentException(target.getName() + " is not online!");
+					if (target == null)
+						throw new IllegalArgumentException(target.getName() + " is not online!");
 
-					if (target.getVehicle() == null) throw new IllegalArgumentException((target == psender ? "You are" : target.getName() + " is") + " not riding anything!");
+					if (target.getVehicle() == null)
+						throw new IllegalArgumentException((target == psender ? "You are" : target.getName() + " is") + " not riding anything!");
 
 					Passengers.eject(target);
 					C64Utils.message(sender, "&bYou ejected " + (target == psender ? "yourself!" : "&6" + target.getName()));

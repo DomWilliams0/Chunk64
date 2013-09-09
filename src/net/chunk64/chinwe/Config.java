@@ -12,7 +12,7 @@ public class Config
 
 	public static List<String> Owners, MuteCommands;
 	public static boolean WarnOnHalt, Debug, ExemptOwners, SendAliases;
-	public static int MeasureStick;
+	public static int MeasureStick, MoverTool, HandyHelper;
 	public static String MotdPrefix, StaffChatPrefix, WhitelistMessage, StartupFileName;
 
 	public Config(boolean log)
@@ -22,10 +22,11 @@ public class Config
 		if (!configFile.exists())
 		{
 			Chunk64.c64.saveDefaultConfig();
-//			if (log) C64Utils.message(plugin.getServer().getConsoleSender(), "config.yml not found, creating...");
-			if (log) C64Utils.warning("config.yml not found, creating...");
-		}
-		else if (log) C64Utils.info("config.yml found and loaded.");
+			//			if (log) C64Utils.message(plugin.getServer().getConsoleSender(), "config.yml not found, creating...");
+			if (log)
+				C64Utils.warning("config.yml not found, creating...");
+		} else if (log)
+			C64Utils.info("config.yml found and loaded.");
 
 		// Load values
 		Owners = config.getStringList("owner-names");
@@ -35,6 +36,8 @@ public class Config
 		ExemptOwners = config.getBoolean("exempt-owners");
 		SendAliases = config.getBoolean("send-aliases");
 		MeasureStick = config.getInt("measure-stick");
+		MoverTool = config.getInt("mover-tool");
+		HandyHelper = config.getInt("handy-helper");
 		MotdPrefix = config.getString("motd-prefix");
 		StaffChatPrefix = config.getString("staffchat-prefix");
 		WhitelistMessage = config.getString("whitelist-message");

@@ -17,18 +17,20 @@ public class Command_spoof implements CommandExecutor
 {
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)) || cmd.getName().equalsIgnoreCase("spoff"))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				if (args.length >= 2)
 				{
 					List<CommandSender> p = CommandUtils.getSpoofTarget(sender, args[0]);
-					if (p.size() == 0) return true;
+					if (p.size() == 0)
+						return true;
 
 
 					boolean chat = cmd.getName().equalsIgnoreCase("spoff");
@@ -51,7 +53,8 @@ public class Command_spoof implements CommandExecutor
 					if (exempts.size() != 0)
 						C64Utils.message(sender, "&c" + C64Utils.formatList(exempts, true) + " cannot be " + cmd.getName() + "ed!");
 
-					if (p.size() == 0) return true;
+					if (p.size() == 0)
+						return true;
 
 					boolean all = p.size() > 1;
 					for (CommandSender s : p)
@@ -62,7 +65,8 @@ public class Command_spoof implements CommandExecutor
 							Bukkit.dispatchCommand(Bukkit.getConsoleSender(), chat ? "say " + command : command);
 
 						else if (s instanceof Player && ((Player) s).isOnline())
-							if (chat) ((Player) s).chat(command);
+							if (chat)
+								((Player) s).chat(command);
 
 							else
 							{

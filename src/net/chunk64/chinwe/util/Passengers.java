@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Passengers
 {
-	public static List<Entity> getPassengers (Entity mount)
+	public static List<Entity> getPassengers(Entity mount)
 	{
 
 		Entity passenger = mount.getPassenger();
@@ -17,10 +17,8 @@ public class Passengers
 			currentPassengers.add(passenger);
 			while (true)
 			{
-				if (passenger.getPassenger() == null)
-					break;
-				else
-					passenger = passenger.getPassenger();
+				if (passenger.getPassenger() == null) break;
+				else passenger = passenger.getPassenger();
 
 				currentPassengers.add(passenger);
 			}
@@ -29,7 +27,7 @@ public class Passengers
 		return currentPassengers;
 	}
 
-	public static Entity getTopPassenger (Entity mount)
+	public static Entity getTopPassenger(Entity mount)
 	{
 		Entity passenger = mount.getPassenger(), finalPassenger;
 		if (passenger != null)
@@ -40,26 +38,26 @@ public class Passengers
 				{
 					finalPassenger = passenger;
 					break;
-				} else
-					passenger = passenger.getPassenger();
+				} else passenger = passenger.getPassenger();
 			}
-		} else
-			finalPassenger = mount;
+		} else finalPassenger = mount;
 
 		return finalPassenger;
 	}
 
-	public static void eject (Entity entity)
+	public static void eject(Entity entity)
 	{
-		if (entity.getVehicle() != null) entity.getVehicle().eject();
+		if (entity.getVehicle() != null)
+			entity.getVehicle().eject();
 	}
 
-	public static Entity getMount (Entity entity)
+	public static Entity getMount(Entity entity)
 	{
 		Entity vehicle = entity.getVehicle(), mount;
 
 		// Self
-		if (vehicle == null) return entity;
+		if (vehicle == null)
+			return entity;
 
 		while (true)
 		{
@@ -67,24 +65,21 @@ public class Passengers
 			{
 				mount = vehicle;
 				break;
-			} else
-				vehicle = vehicle.getVehicle();
+			} else vehicle = vehicle.getVehicle();
 		}
 
 		return mount;
 	}
 
-	public static void addPassenger (Entity rider, Entity mount) throws IllegalArgumentException
+	public static void addPassenger(Entity rider, Entity mount) throws IllegalArgumentException
 	{
 		Entity top = Passengers.getTopPassenger(mount);
 
-		if (top == rider)
-			throw new IllegalArgumentException("An entity cannot ride itself!");
+		if (top == rider) throw new IllegalArgumentException("An entity cannot ride itself!");
 		if (Passengers.getPassengers(mount).contains(rider))
 			throw new IllegalArgumentException("That entity is already a passenger!");
-//		if (rider == getMount(rider))
-//			throw new IllegalArgumentException("That entity cannot mount that entity!");
-
+		//		if (rider == getMount(rider))
+		//			throw new IllegalArgumentException("That entity cannot mount that entity!");
 
 
 		eject(rider);
@@ -98,13 +93,11 @@ public class Passengers
 	 * @param rider Entity to eject, null for all
 	 * @param mount The mount
 	 */
-	public static void ejectPassenger (Entity rider, Entity mount)
+	public static void ejectPassenger(Entity rider, Entity mount)
 	{
-		if (rider != null)
-			Passengers.eject(rider);
-		else
-			for (Entity e : Passengers.getPassengers(mount))
-				Passengers.eject(e);
+		if (rider != null) Passengers.eject(rider);
+		else for (Entity e : Passengers.getPassengers(mount))
+			Passengers.eject(e);
 	}
 
 }

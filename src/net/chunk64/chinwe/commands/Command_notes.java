@@ -21,13 +21,14 @@ public class Command_notes implements CommandExecutor
 	int pageLength = 10;
 
 	@Override
-	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (cmd.getName().equalsIgnoreCase(CommandUtils.getCommandName(this)))
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				// Help
 				if (args.length == 0)
@@ -111,7 +112,8 @@ public class Command_notes implements CommandExecutor
 
 						String message = StringUtils.join(args, " ", 2, args.length);
 
-						if (message.length() == 0) throw new IllegalArgumentException("Please specify a message!");
+						if (message.length() == 0)
+							throw new IllegalArgumentException("Please specify a message!");
 
 						if (message.contains(";"))
 							throw new IllegalArgumentException("Please don't use semicolons (;) in your notes!");
@@ -147,7 +149,8 @@ public class Command_notes implements CommandExecutor
 						String start = StringUtils.join(args, " ", 2, args.length);
 						Note note = null;
 						for (Note n : playersNotes)
-							if (n.getMessage().toLowerCase().startsWith(start.toLowerCase())) note = n;
+							if (n.getMessage().toLowerCase().startsWith(start.toLowerCase()))
+								note = n;
 
 						if (note == null)
 							throw new IllegalArgumentException("There were no notes beginning with \"" + start + "\"!");
@@ -180,7 +183,7 @@ public class Command_notes implements CommandExecutor
 	}
 
 	// Written by gomeow <3
-	private void paginate (CommandSender sender, String playerName, SortedMap<Integer, String> map, int page, int pageLength)
+	private void paginate(CommandSender sender, String playerName, SortedMap<Integer, String> map, int page, int pageLength)
 	{
 		if (page == 1)
 		{

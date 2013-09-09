@@ -13,7 +13,7 @@ import static org.bukkit.ChatColor.*;
 public class RestartUtil
 {
 
-	public static void restart (CommandSender sender, String message) throws IllegalArgumentException
+	public static void restart(CommandSender sender, String message) throws IllegalArgumentException
 	{
 		try
 		{
@@ -51,7 +51,7 @@ public class RestartUtil
 
 				Thread shutdownHook = new Thread()
 				{
-					public void run ()
+					public void run()
 					{
 						try
 						{
@@ -74,8 +74,9 @@ public class RestartUtil
 				Runtime.getRuntime().addShutdownHook(shutdownHook);
 			} else
 			{
-			if (sender != null) C64Utils.message(sender, "Could not find the startup script " + file.getName() + "! Stopping server...");
-			C64Utils.severe("Could not find the startup script " + file.getName() + "! Stopping server...");
+				if (sender != null)
+					C64Utils.message(sender, "Could not find the startup script " + file.getName() + "! Stopping server...");
+				C64Utils.severe("Could not find the startup script " + file.getName() + "! Stopping server...");
 			}
 			System.exit(0);
 		} catch (Exception ex)
@@ -83,7 +84,7 @@ public class RestartUtil
 		}
 	}
 
-	public static void restartDefaultMessage ()
+	public static void restartDefaultMessage()
 	{
 		restart(null, BOLD.toString() + RED + "Server restarting! " + BOLD.toString() + AQUA + "Please rejoin!");
 	}

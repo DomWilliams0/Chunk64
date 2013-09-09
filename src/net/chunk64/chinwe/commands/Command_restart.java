@@ -22,7 +22,8 @@ public class Command_restart implements CommandExecutor
 		{
 			try
 			{
-				if (!CommandUtils.canUse(sender, cmd)) return true;
+				if (!CommandUtils.canUse(sender, cmd))
+					return true;
 
 				File startupFile = new File(Config.StartupFileName);
 				if (Config.StartupFileName.equals("none"))
@@ -36,7 +37,7 @@ public class Command_restart implements CommandExecutor
 				C64Utils.message(sender, "&bRestarting the server!");
 				RestartUtil.restart(sender, reason);
 				return true;
-				
+
 			} catch (IllegalArgumentException e1)
 			{
 				C64Utils.error(sender, e1);
